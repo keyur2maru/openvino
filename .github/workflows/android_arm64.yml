@@ -46,7 +46,7 @@ jobs:
         shell: bash
     runs-on: ubuntu-latest
     container:
-      image: openvinogithubactions.azurecr.io/dockerhub/ubuntu:20.04
+      image: docker.io/openvino/ubuntu20_runtime:latest
       volumes:
         - /mount:/mount
       options: -e SCCACHE_AZURE_BLOB_CONTAINER -e SCCACHE_AZURE_CONNECTION_STRING
