@@ -70,9 +70,10 @@ jobs:
       VCPKG_FORCE_SYSTEM_BINARIES: '1'
       SCCACHE_AZURE_KEY_PREFIX: android_arm64
     if: "!needs.smart_ci.outputs.skip_workflow"
+
     steps:
       - name: Deps
-      - uses: awalsh128/cache-apt-pkgs-action@latest
+        uses: awalsh128/cache-apt-pkgs-action@latest
         with:
           packages: git ca-certificates ccache scons ninja-build build-essential python3-pip curl zip unzip tar autoconf libtool autoconf-archive pkg-config linux-libc-dev unzip wget default-jdk
           version: 1.0
