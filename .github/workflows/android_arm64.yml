@@ -71,8 +71,11 @@ jobs:
       SCCACHE_AZURE_KEY_PREFIX: android_arm64
     if: "!needs.smart_ci.outputs.skip_workflow"
     steps:
-      - name: Install git
-        run: sudo apt-get update && sudo apt-get install --assume-yes --no-install-recommends git ca-certificates
+      - name: Deps
+      - uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: git ca-certificates ccache scons ninja-build build-essential python3-pip curl zip unzip tar autoconf libtool autoconf-archive pkg-config linux-libc-dev unzip wget default-jdk
+          version: 1.0
 
       - name: Clone OpenVINO
         uses: actions/checkout@v4
@@ -110,22 +113,10 @@ jobs:
       # Dependencies
       #
 
-      - name: Install dependencies
-        run: |
-          # generic dependencies
-          sudo apt --assume-yes install ccache scons ninja-build build-essential python3-pip
-
           # vcpkg requires cmake 3.19 or later
           python3 -m pip install -U pip cmake
-          # vcpkg's tool dependencies
-          sudo apt --assume-yes install curl zip unzip tar
-          # vcpkg 'python3' port dependencies
-          sudo apt --assume-yes install autoconf libtool autoconf-archive
-          # vcpkg tree of dependencies require extra packages
-          sudo apt --assume-yes install pkg-config linux-libc-dev
 
           # Install Android SDK, NDK and Tools
-          sudo apt -y --no-install-recommends install unzip wget default-jdk
           wget https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip
           unzip commandlinetools-linux-7583922_latest.zip
           echo "yes" | ./cmdline-tools/bin/sdkmanager --sdk_root=${ANDROID_TOOLS} --install "ndk-bundle" "platform-tools" "platforms;android-${{ env.ANDROID_SDK_VERSION }}"
